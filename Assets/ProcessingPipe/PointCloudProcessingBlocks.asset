@@ -1,0 +1,163 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8960578201229868742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a370b019fb25fbe4384bc45033197fcd, type: 3}
+  m_Name: RsHoleFillingFilter
+  m_EditorClassIdentifier: 
+  fixedEnabled: 1
+  _holesFill: 0
+--- !u!114 &-8694486743584887411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dffddaeb99d79644b99b1d8d18bad86, type: 3}
+  m_Name: RsThresholdFilter
+  m_EditorClassIdentifier: 
+  fixedEnabled: 0
+  MinDistance: 0.1
+  MaxDistance: 0.5
+--- !u!114 &-8003051945123809718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe855be1598f844c877bf604728ab6a, type: 3}
+  m_Name: RsArucoCrop
+  m_EditorClassIdentifier: 
+  fixedEnabled: 0
+  arucoIds: 0100000002000000
+  origin: {x: 220, y: 180}
+  size: {x: 220, y: 150}
+--- !u!114 &-915082865357820385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bce048bd313fc40b6eb0a08d7f83ab, type: 3}
+  m_Name: RsDisparityTransform
+  m_EditorClassIdentifier: 
+  fixedEnabled: 1
+  Mode: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475d71c97716db644863efe7bddfbd70, type: 3}
+  m_Name: PointCloudProcessingBlocks
+  m_EditorClassIdentifier: 
+  _processingBlocks:
+  - {fileID: 7603185555130117956}
+  - {fileID: -915082865357820385}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 114340648865021418}
+  - {fileID: -8960578201229868742}
+  - {fileID: 114093195037715096}
+  - {fileID: -8003051945123809718}
+  - {fileID: -8694486743584887411}
+  - {fileID: 114894276943703578}
+  - {fileID: 114189879441361140}
+--- !u!114 &114093195037715096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec95ba2af23efd408d33138086f1c65, type: 3}
+  m_Name: RsTemporalFilter
+  m_EditorClassIdentifier: 
+  fixedEnabled: 1
+  _filterSmoothAlpha: 0.4
+  _filterSmoothDelta: 20
+  _temporalPersistence: 3
+--- !u!114 &114189879441361140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a93f62582029d4aab3757e6e2fcaf2, type: 3}
+  m_Name: RsColorizer
+  m_EditorClassIdentifier: 
+  fixedEnabled: 0
+  visualPreset: 0
+  colorScheme: 0
+  histogramEqualization: 1
+  minDist: 0
+  maxDist: 6
+--- !u!114 &114340648865021418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bce048bd313fc40b6eb0a08d7f83ab, type: 3}
+  m_Name: RsDisparityTransform
+  m_EditorClassIdentifier: 
+  fixedEnabled: 1
+  Mode: 0
+--- !u!114 &114894276943703578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949c0815228b7334a89a9b09ff0c7fdb, type: 3}
+  m_Name: RsPointCloud
+  m_EditorClassIdentifier: 
+  fixedEnabled: 0
+  TextureStream: 1
+  TextureFormat: 5
+  _occlusionRemoval: 1
+--- !u!114 &7603185555130117956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f321dd38a2028949a3ecd8e2905bb5f, type: 3}
+  m_Name: RsAlign
+  m_EditorClassIdentifier: 
+  fixedEnabled: 1
+  _alignTo: 1
