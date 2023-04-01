@@ -15,7 +15,12 @@ public class RsPointCloudRenderer : MonoBehaviour
     public Vector2 origin;
     public Vector2Int size;
     public float depthScale = 1;
+    public ushort maxDepth = 350;
+    public ushort minDepth = 175;
     public int smoothingRate;
+    public bool useHCFilter;
+    public float HCalpha = 0.5f;
+    public float HCbeta = 0.75f;
 
     public RsFrameProvider Source;
     private Mesh mesh;
@@ -146,7 +151,8 @@ public class RsPointCloudRenderer : MonoBehaviour
     protected void LateUpdate()
     {
 
-        if(!Input.GetKeyDown(KeyCode.Space)){
+        if (!Input.GetKeyDown(KeyCode.Space))
+        {
             return;
         }
 
@@ -179,12 +185,20 @@ public class RsPointCloudRenderer : MonoBehaviour
                     // if (points.VertexData != IntPtr.Zero)
                     if (points.Is(Extension.DepthFrame))
                     {
-                        
+
                         // var depth = FrameSet.FromFrame(points).DepthFrame;
                         // var depth = points.
                         var depthCount = points.Width * points.Height;
                         var depthData = new ushort[depthCount];
                         points.CopyTo(depthData);
+
+                        // Limit values
+                        depthData = depthData.Select(x => x > maxDepth ? maxDepth
+                                            : x < minDepth ? minDepth
+                                            : x
+                                        ).ToArray();
+
+                        // var cutValues = new List<ushort>();
 
 
                         // points.CopyVertices(vertices);
@@ -194,7 +208,7 @@ public class RsPointCloudRenderer : MonoBehaviour
                         // TODO skip the point cloud processing, use a height map instead
                         // Debug.Log(vertices[0..100].Select(v => v));
                         // Debug.Log(vertices[0..100].OrderBy(v => v.x).Select(v => v.x).ToArray());
-                        
+
                         // Debug.Log("===========");
 
                         List<Vector3> verts = new();
@@ -202,9 +216,9 @@ public class RsPointCloudRenderer : MonoBehaviour
                         // var medianDepth = (float) depthData.Select(x => (int)x).Median();
 
                         //Bottom left section of the map, other sections are similar
-                        for(int y = 0; y < 480; y++)
+                        for (int y = 0; y < 480; y++)
                         {
-                            for(int x = 0; x < 640; x++)
+                            for (int x = 0; x < 640; x++)
                             {
 
                                 // If a depth is 0 don't add vertex
@@ -226,6 +240,7 @@ public class RsPointCloudRenderer : MonoBehaviour
                                 //Skip if a new square on the plane hasn't been formed
                                 if (x <= origin.x || y <= origin.y || x >= origin.x + size.x || y >= origin.y + size.y) continue;
 
+                                // cutValues.Add( depthData[640 * y + x]);
 
                                 //Adds the index of the three vertices in order to make up each of the two tris
                                 tris.Add(640 * y + x); //Top right
@@ -241,14 +256,14 @@ public class RsPointCloudRenderer : MonoBehaviour
                         for (var i = 0; i < uvs.Length; i++) //Give UV coords X,Z world coords
                             uvs[i] = new Vector2(verts[i].x, verts[i].z);
 
-                        // if(tris.Count > 0)
+                        if (useHCFilter)
+                        {
+                            mesh.vertices = MeshSmoothing.HCFilter(verts.ToArray(), tris.ToArray(), smoothingRate, HCalpha, HCbeta);
+                        }
+                        else
+                        {
                             mesh.vertices = MeshSmoothing.LaplacianFilter(verts.ToArray(), tris.ToArray(), smoothingRate);
-                        // else
-                        //     mesh.vertices = verts.ToArray();
-                        
-                        // mesh.vertices = verts.ToArray();
-                        // mesh.vertices = vertices;
-                        // mesh.uv = uvs;
+                        }
                         mesh.triangles = tris.ToArray();
 
                         mesh.RecalculateBounds();
@@ -261,5 +276,5 @@ public class RsPointCloudRenderer : MonoBehaviour
                 }
         }
     }
-    
+
 }

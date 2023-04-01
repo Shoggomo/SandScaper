@@ -58,7 +58,7 @@ namespace mattatz.MeshSmoothingSystem {
 			return mesh;
 		}
 
-		static Vector3[] HCFilter(Vector3[] vertices, int[] triangles, int times, float alpha, float beta) {
+		public static Vector3[] HCFilter(Vector3[] vertices, int[] triangles, int times, float alpha, float beta) {
 			alpha = Mathf.Clamp01(alpha);
 			beta = Mathf.Clamp01(beta);
 
@@ -81,7 +81,9 @@ namespace mattatz.MeshSmoothingSystem {
 			}
 
 			for(int i = 0; i < p.Length; i++) {
-				var adjacents = network[i].Connection;
+                if (!network.TryGetValue(i, out VertexConnection conn))
+                    continue;
+                var adjacents = conn.Connection;
 				var bs = Vector3.zero;
 				foreach(int adj in adjacents) {
 					bs += b[adj];

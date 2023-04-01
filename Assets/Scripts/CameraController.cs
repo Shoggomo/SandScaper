@@ -8,22 +8,29 @@ public class CameraController : MonoBehaviour
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     public float speedZoom = 2.0f;
-    public float panSpeed = 1.0f;
 
     private float yaw = 0.0f;
     private float pitch = 0.0f;
+    private Vector3 mouseWorldPosStart;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private Vector3 originalScale;
 
-    // Start is called before the first frame update
     void Start()
     {
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+        originalScale = transform.localScale;
 
+        pitch = transform.eulerAngles.x;
+        yaw = transform.eulerAngles.y;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Rotate
-        if (Input.GetMouseButton(0))
+        if (!Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButton(2))
         {
             yaw += speedH * Input.GetAxis("Mouse X");
             pitch -= speedV * Input.GetAxis("Mouse Y");
@@ -32,16 +39,32 @@ public class CameraController : MonoBehaviour
         }
 
         // Pan
-        if (Input.GetMouseButton(1))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            var x = transform.position.x + panSpeed * Input.GetAxis("Mouse X");
-            var y = transform.position.y;
-            var z = transform.position.z + panSpeed * Input.GetAxis("Mouse Y");
+            var mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.transform.localPosition.y;
 
-            transform.position = new Vector3(x, y, z);
+            if (Input.GetMouseButtonDown(2))
+            {
+                mouseWorldPosStart = Camera.main.ScreenToWorldPoint(mousePos);
+            }
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButton(2))
+            {
+                var mouseWorldPosDiff = mouseWorldPosStart - Camera.main.ScreenToWorldPoint(mousePos);
+                transform.position += mouseWorldPosDiff;
+            }
         }
 
         // Zoom
         transform.localScale -= speedZoom * Input.GetAxis("Mouse ScrollWheel") * Vector3.one;
+
+        // Reset Camera
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.SetPositionAndRotation(originalPosition, originalRotation);
+            transform.localScale = originalScale;
+            pitch = originalRotation.eulerAngles.x;
+            yaw = originalRotation.eulerAngles.y;
+        }
     }
 }
